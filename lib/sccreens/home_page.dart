@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                        blurRadius: 12, color: Colors.black45, spreadRadius: 0)
+                        blurRadius: 12, color: Colors.black38, spreadRadius: 0)
                   ],
                 ),
                 child: CircleAvatar(
@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    fontSize: 40),
+                    fontSize: 35),
               )
             ],
           ),
