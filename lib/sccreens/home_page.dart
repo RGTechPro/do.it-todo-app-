@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:housy_task/constants/size_config.dart';
 import 'package:housy_task/widgets/card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Color> GColors = [Color(0xfff6ac51), Color(0xfff65875)];
+  @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [Color(0xfff6ac51), Color(0xfff65875)],
+              colors: GColors,
               begin: Alignment.topRight,
               end: Alignment.bottomLeft)),
       child: Scaffold(
@@ -48,69 +56,95 @@ class HomePage extends StatelessWidget {
           ],
           backgroundColor: Colors.transparent,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 12, color: Colors.black38, spreadRadius: 0)
-                  ],
-                ),
-                child: CircleAvatar(
-                    radius: 30,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Image.asset(
-                        'images/avatar.jpg',
-                        height: 60,
-                        width: 60,
-                        fit: BoxFit.fitWidth,
-                      ),
-                    )),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 50, right: 50, top: 50),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 12,
+                            color: Colors.black38,
+                            spreadRadius: 0)
+                      ],
+                    ),
+                    child: CircleAvatar(
+                        radius: 30,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Image.asset(
+                            'images/avatar.jpg',
+                            height: 60,
+                            width: 60,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Text(
+                    'Hello, Jane.',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 35),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Looks like feel good.\nYou have 3 tasks to do today.',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.white.withOpacity(.75),
+                        fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Text(
+                    'TODAY : JANUARY 31, 2022',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 25,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: SizedBox(
+                height: SizeConfig.screenHeight! * 0.5,
+                child: PageView(
+                    controller: PageController(viewportFraction: 0.75),
+                    onPageChanged: (int i) {
+                      setState(() {
+                        if (i == 1) {
+                          GColors = [Color(0xff62aee9), Color(0xff5363e2)];
+                        } else if (i == 2) {
+                          GColors = [Color(0xff4cc1a9), Color(0xff378e7c)];
+                        } else {
+                          GColors = [Color(0xfff6ac51), Color(0xfff65875)];
+                        }
+                      });
+                    },
+                    //shrinkWrap: true,
+                    //  physics: PageScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: [TaskCard(), TaskCard(), TaskCard()]),
               ),
-              Text(
-                'Hello, Jane.',
-                style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 35),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Looks like feel good.\nYou have 3 tasks to do today.',
-                style: TextStyle(
-                    fontFamily: 'Roboto',
-                    color: Colors.white.withOpacity(.75),
-                    fontSize: 20),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Text(
-                'TODAY : JANUARY 31, 2022',
-                style: TextStyle(
-                    fontFamily: 'Roboto',
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TaskCard()
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
