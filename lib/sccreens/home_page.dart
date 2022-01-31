@@ -82,7 +82,28 @@ class HomePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 35),
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Looks like feel good.\nYou have 3 tasks to do today.',
+                style: TextStyle(
+                    fontFamily: 'Roboto',
+                    color: Colors.white.withOpacity(.75),
+                    fontSize: 20),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'TODAY : JANUARY 31, 2022',
+                style: TextStyle(
+                    fontFamily: 'Roboto',
+                    color: Colors.white,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         ),
