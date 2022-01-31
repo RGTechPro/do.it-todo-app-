@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:housy_task/constants/size_config.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({Key? key}) : super(key: key);
@@ -73,9 +73,21 @@ class TaskCard extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: SizeConfig.screenHeight! * 0.02,
+              height: SizeConfig.screenHeight! * 0.025,
             ),
-           
+            LinearPercentIndicator(
+              trailing: Text(
+                '83%',
+                style: TextStyle(fontFamily: 'Roboto', color: Colors.black54),
+              ),
+              percent: .83,
+              lineHeight: 3,
+              backgroundColor: Colors.grey.withOpacity(.2),
+              linearGradient: LinearGradient(
+                  colors: [Color(0xfff65875), Color(0xfff6ac51)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight),
+            )
           ],
         ),
       ),
