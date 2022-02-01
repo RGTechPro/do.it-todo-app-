@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:housy_task/Provider/task.dart';
+import 'package:housy_task/model/task.dart';
 import 'package:housy_task/sccreens/add_task.dart';
 import 'package:housy_task/widgets/task_tile.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +21,6 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-  List<Color> GColors = [Color(0xff62aee9), Color(0xff5363e2)];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,23 +65,29 @@ class _TaskState extends State<Task> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 45, left: 40, right: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          //
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey.withOpacity(.15))),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Icon(
-                    widget.icon,
-                    color: widget.color!.first,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border:
+                            Border.all(color: Colors.grey.withOpacity(.15))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(
+                        widget.icon,
+                        color: widget.color!.first,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
             Text(
               '9 Tasks',
@@ -118,11 +127,157 @@ class _TaskState extends State<Task> {
               style: TextStyle(
                   fontFamily: 'Roboto', color: Colors.black54, fontSize: 17),
             ),
-            ListView(
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              children: [TaskTile(), TaskTile()],
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection(widget.profile!)
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                        child: Text(
+                      'Something went wrong',
+                    ));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  try {
+                    final now = new DateTime.now();
+                    String date = DateFormat.yMMMMd('en_US').format(now);
+                    List tempDoc = snapshot.data![date];
+                    // List<Tasks> tempList = [];
+                    // for (int i = 0; i < tempDoc.length; i++) {
+                    //   tempList.insert(
+                    //       0,
+                    //       Tasks(taskName: tempDoc[i]['taskName'],
+                    //       isDone: tempDoc[i]['isDone']
+                    //          ));
+                    // }
+                    if (tempDoc.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No task found for today!',
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: tempDoc.length,
+                      itemBuilder: (context, index) {
+                        return TaskTile(
+                            taskName: tempDoc[index]['taskName'],
+                            isDone: tempDoc[index]['isDone'],
+                            Dcontext: context,day: 'Today',);
+                      },
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                    );
+                  } catch (e) {
+                    if (e.toString().contains('field does not exist') ||
+                        e.toString().contains('cannot get a field')) {
+                      return Center(
+                        child: Text(
+                          'No task found for today!',
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }
+                    return Center(
+                        child: Text(
+                      'Error: $e',
+                      textAlign: TextAlign.center,
+                    ));
+                  }
+                }),
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Text(
+                'Tommorrow',
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.black54, fontSize: 17),
+              ),
             ),
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection(widget.profile!)
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                        child: Text(
+                      'Something went wrong',
+                    ));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  try {
+                    var now = new DateTime.now();
+                    var t = now.add(new Duration(days: 1));
+                    String date = DateFormat.yMMMMd('en_US').format(t);
+                    List tempDoc = snapshot.data![date];
+                    // List<Tasks> tempList = [];
+                    // for (int i = 0; i < tempDoc.length; i++) {
+                    //   tempList.insert(
+                    //       0,
+                    //       Tasks(taskName: tempDoc[i]['taskName'],
+                    //       isDone: tempDoc[i]['isDone']
+                    //          ));
+                    // }
+                    if (tempDoc.isEmpty) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'No task found!',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: tempDoc.length,
+                      itemBuilder: (context, index) {
+                        return TaskTile(
+                            taskName: tempDoc[index]['taskName'],
+                            isDone: tempDoc[index]['isDone'],
+                            Dcontext: context,day: 'Tommorrow',);
+                      },
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                    );
+                  } catch (e) {
+                    if (e.toString().contains('field does not exist') ||
+                        e.toString().contains('cannot get a field')) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'No task found for tommorrow!',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    }
+                    return Center(
+                        child: Text(
+                      'Error: $e',
+                      textAlign: TextAlign.center,
+                    ));
+                  }
+                }),
           ],
         ),
       ),

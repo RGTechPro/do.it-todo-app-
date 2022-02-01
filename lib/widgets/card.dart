@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:housy_task/Provider/task.dart';
 import 'package:housy_task/constants/size_config.dart';
 import 'package:housy_task/sccreens/tasks.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 class TaskCard extends StatelessWidget {
   String? profile;
@@ -20,6 +22,8 @@ class TaskCard extends StatelessWidget {
       padding: const EdgeInsets.only(right: 12, top: 15, left: 2, bottom: 20),
       child: GestureDetector(
         onTap: () {
+            Provider.of<TaskData>(context, listen: false).profile =
+             profile;
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Task(
 profile: profile,

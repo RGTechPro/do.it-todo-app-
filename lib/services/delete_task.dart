@@ -7,10 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'snackbar.dart';
 
-Future? addTask(
-    BuildContext context, String taskName, String date, bool isDone) {
+Future? deleteTask(
+    BuildContext Dcontext, String taskName, String date, bool isDone) {
   User? user = FirebaseAuth.instance.currentUser;
-  var TaskProvider = Provider.of<TaskData>(context, listen: false);
+  var TaskProvider = Provider.of<TaskData>(Dcontext, listen: false);
   final _firebase = FirebaseFirestore.instance;
 
   List<Map<String, dynamic>> myData = [
@@ -20,14 +20,11 @@ Future? addTask(
     },
   ];
   print(myData);
-  return _firebase
+   FirebaseFirestore.instance
       .collection(TaskProvider.profile!)
       .doc(user!.uid)
-      .set({date: FieldValue.arrayUnion(myData)}, SetOptions(merge: true)).then(
-          (value) {
-    Navigator.pop(context);
-
-    showSnackBar('Successfully added the task!', context);
-  }).catchError(
-          (error) => showSnackBar('Failed to add a new task. $error', context));
+      .update({date: FieldValue.arrayRemove(myData)})
+      .then((value) => showSnackBar('Deleted Successfully!', Dcontext))
+      .catchError(
+          (error) => showSnackBar('Failed to delete task. $error', Dcontext));
 }
