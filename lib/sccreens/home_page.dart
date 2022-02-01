@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                     height: 10,
                   ),
                   Text(
-                    'Looks like feel good.\nYou have 3 tasks to do today.',
+                    'Looks like feel good.\nYou have some tasks to do today.',
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         color: Colors.white.withOpacity(.75),

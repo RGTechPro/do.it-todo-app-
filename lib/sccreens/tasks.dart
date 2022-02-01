@@ -21,6 +21,8 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
+  // int len = 0;
+  // int n = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,11 +91,25 @@ class _TaskState extends State<Task> {
                 ),
               ],
             ),
-            Text(
-              '9 Tasks',
-              style: TextStyle(
-                  fontFamily: 'Roboto', color: Colors.black54, fontSize: 17),
-            ),
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection(widget.profile!)
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  final now = new DateTime.now();
+                  String date = DateFormat.yMMMMd('en_US').format(now);
+                  List tempDoc = snapshot.data![date];
+                  Provider.of<TaskData>(context).len = tempDoc.length;
+
+                  return Text(
+                    '${Provider.of<TaskData>(context).len} Tasks today',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.black54,
+                        fontSize: 17),
+                  );
+                }),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
@@ -105,23 +121,45 @@ class _TaskState extends State<Task> {
                     fontSize: 30),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              child: LinearPercentIndicator(
-                padding: EdgeInsets.only(right: 10),
-                trailing: Text(
-                  '36%',
-                  style: TextStyle(fontFamily: 'Roboto', color: Colors.black54),
-                ),
-                percent: .36,
-                lineHeight: 3,
-                backgroundColor: Colors.grey.withOpacity(.2),
-                linearGradient: LinearGradient(
-                    colors: widget.color!,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight),
-              ),
-            ),
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection(widget.profile!)
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  final now = new DateTime.now();
+                  String date = DateFormat.yMMMMd('en_US').format(now);
+                  List tempDoc = snapshot.data![date];
+                  Provider.of<TaskData>(context).len = tempDoc.length;
+                  Provider.of<TaskData>(context).n = 0;
+                  for (int i = 0;
+                      i < Provider.of<TaskData>(context, listen: false).len;
+                      i++) {
+                    if (tempDoc[i]['isDone'] == true) {
+                      Provider.of<TaskData>(context).n++;
+                    }
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: LinearPercentIndicator(
+                      padding: EdgeInsets.only(right: 10),
+                      trailing: Text(
+                        '${(Provider.of<TaskData>(context).n / Provider.of<TaskData>(context).len * 100).toStringAsFixed(2)}%',
+                        style: TextStyle(
+                            fontFamily: 'Roboto', color: Colors.black54),
+                      ),
+                      percent: Provider.of<TaskData>(context).n /
+                          Provider.of<TaskData>(context).len,
+                      lineHeight: 3,
+                      backgroundColor: Colors.grey.withOpacity(.2),
+                      linearGradient: LinearGradient(
+                          colors: widget.color!,
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight),
+                    ),
+                  );
+                }),
             Text(
               'Today',
               style: TextStyle(
@@ -158,6 +196,17 @@ class _TaskState extends State<Task> {
                     //       isDone: tempDoc[i]['isDone']
                     //          ));
                     // }
+                    // Provider.of<TaskData>(context).len = tempDoc.length;
+
+                    // for (int i = 0;
+                    //     i < Provider.of<TaskData>(context, listen: false).len;
+                    //     i++) {
+                    //   if (tempDoc[i]['isDone'] == true) {
+                    //     Provider.of<TaskData>(context).n++;
+                    //   }
+                    // }
+                    // Provider.of<TaskData>(context, listen: false).call();
+
                     if (tempDoc.isEmpty) {
                       return Center(
                         child: Text(
@@ -171,9 +220,11 @@ class _TaskState extends State<Task> {
                       itemCount: tempDoc.length,
                       itemBuilder: (context, index) {
                         return TaskTile(
-                            taskName: tempDoc[index]['taskName'],
-                            isDone: tempDoc[index]['isDone'],
-                            Dcontext: context,day: 'Today',);
+                          taskName: tempDoc[index]['taskName'],
+                          isDone: tempDoc[index]['isDone'],
+                          Dcontext: context,
+                          day: 'Today',
+                        );
                       },
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
@@ -227,6 +278,7 @@ class _TaskState extends State<Task> {
                     var t = now.add(new Duration(days: 1));
                     String date = DateFormat.yMMMMd('en_US').format(t);
                     List tempDoc = snapshot.data![date];
+
                     // List<Tasks> tempList = [];
                     // for (int i = 0; i < tempDoc.length; i++) {
                     //   tempList.insert(
@@ -251,9 +303,11 @@ class _TaskState extends State<Task> {
                       itemCount: tempDoc.length,
                       itemBuilder: (context, index) {
                         return TaskTile(
-                            taskName: tempDoc[index]['taskName'],
-                            isDone: tempDoc[index]['isDone'],
-                            Dcontext: context,day: 'Tommorrow',);
+                          taskName: tempDoc[index]['taskName'],
+                          isDone: tempDoc[index]['isDone'],
+                          Dcontext: context,
+                          day: 'Tommorrow',
+                        );
                       },
                       shrinkWrap: true,
                       physics: ScrollPhysics(),

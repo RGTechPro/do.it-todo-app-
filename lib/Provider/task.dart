@@ -7,4 +7,10 @@ class TaskData extends ChangeNotifier {
   List<Tasks> work = [];
   List<Tasks> home = [];
   String? profile;
+  int n = 0;
+  int len = 0;
+  int total=0;
+  void call() {
+    notifyListeners();
+  }
 }

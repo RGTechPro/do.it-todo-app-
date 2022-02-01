@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:housy_task/Provider/task.dart';
 import 'package:housy_task/constants/size_config.dart';
 import 'package:housy_task/sccreens/tasks.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -83,16 +86,28 @@ color: color,
                 SizedBox(
                   height: SizeConfig.screenHeight! * 0.22,
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  child: Text(
-                    '9 Tasks',
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Colors.black54,
-                        fontSize: 17),
-                  ),
+                StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                    .collection(profile!)
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+                  builder: (context, snapshot) {
+                     final now = new DateTime.now();
+                  String date = DateFormat.yMMMMd('en_US').format(now);
+                  List tempDoc = snapshot.data![date];
+                  Provider.of<TaskData>(context).len = tempDoc.length;
+                    return Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      child: Text(
+                        '${Provider.of<TaskData>(context).len} Tasks',
+                        style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: Colors.black54,
+                            fontSize: 17),
+                      ),
+                    );
+                  }
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -108,19 +123,44 @@ color: color,
                 SizedBox(
                   height: SizeConfig.screenHeight! * 0.020,
                 ),
-                LinearPercentIndicator(
-                  trailing: Text(
-                    '83%',
-                    style:
-                        TextStyle(fontFamily: 'Roboto', color: Colors.black54),
-                  ),
-                  percent: .83,
-                  lineHeight: 3,
-                  backgroundColor: Colors.grey.withOpacity(.2),
-                  linearGradient: LinearGradient(
-                      colors: color!,
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight),
+                StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                    .collection(profile!)
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+                  builder: (context, snapshot) {
+
+ final now = new DateTime.now();
+                  String date = DateFormat.yMMMMd('en_US').format(now);
+                  List tempDoc = snapshot.data![date];
+                  Provider.of<TaskData>(context).len = tempDoc.length;
+                  Provider.of<TaskData>(context).n = 0;
+                  for (int i = 0;
+                      i < Provider.of<TaskData>(context, listen: false).len;
+                      i++) {
+                    if (tempDoc[i]['isDone'] == true) {
+                      Provider.of<TaskData>(context).n++;
+                    }
+                  }
+
+
+
+                    return LinearPercentIndicator(
+                      trailing: Text(
+                        '${(Provider.of<TaskData>(context).n / Provider.of<TaskData>(context).len * 100).toStringAsFixed(2)}%',
+                        style:
+                            TextStyle(fontFamily: 'Roboto', color: Colors.black54),
+                      ),
+                      percent: Provider.of<TaskData>(context).n /
+                          Provider.of<TaskData>(context).len,
+                      lineHeight: 3,
+                      backgroundColor: Colors.grey.withOpacity(.2),
+                      linearGradient: LinearGradient(
+                          colors: color!,
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight),
+                    );
+                  }
                 )
               ],
             ),
