@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:housy_task/constants/size_config.dart';
 import 'package:housy_task/widgets/card.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:housy_task/Provider/account.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final now = new DateTime.now();
   List<Color> GColors = [Color(0xfff6ac51), Color(0xfff65875)];
   @override
   Widget build(BuildContext context) {
@@ -90,7 +95,8 @@ class _HomePageState extends State<HomePage> {
                     height: 25,
                   ),
                   Text(
-                    'Hello, Jane.',
+                    'Hello, ${FirebaseAuth.instance.currentUser!.displayName}.',
+                    maxLines: 1,
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold,
@@ -111,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                     height: 40,
                   ),
                   Text(
-                    'TODAY : JANUARY 31, 2022',
+                    DateFormat.yMMMMd('en_US').format(now),
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         color: Colors.white,
@@ -141,9 +147,23 @@ class _HomePageState extends State<HomePage> {
                     //shrinkWrap: true,
                     //  physics: PageScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    children: [TaskCard(
-                      profile: '',
-                    ), TaskCard(), TaskCard()]),
+                    children: [
+                      TaskCard(
+                        profile: 'Personal',
+                        icon: Icons.person,
+                        color: [Color(0xfff6ac51), Color(0xfff65875)],
+                      ),
+                      TaskCard(
+                        profile: 'Work',
+                        icon: Icons.work,
+                        color: [Color(0xff62aee9), Color(0xff5363e2)],
+                      ),
+                      TaskCard(
+                        profile: 'Home',
+                        icon: Icons.home,
+                        color: [Color(0xff4cc1a9), Color(0xff378e7c)],
+                      )
+                    ]),
               ),
             )
           ],

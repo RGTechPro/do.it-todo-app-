@@ -4,8 +4,12 @@ import 'package:housy_task/widgets/task_tile.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class Task extends StatefulWidget {
-  const Task({Key? key}) : super(key: key);
-
+  Task({this.profile, this.icon, this.task_done, this.total_task, this.color});
+  String? profile;
+  IconData? icon;
+  int? task_done;
+  int? total_task;
+  List<Color>? color;
   @override
   State<Task> createState() => _TaskState();
 }
@@ -26,7 +30,7 @@ class _TaskState extends State<Task> {
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
-                    colors: GColors,
+                    colors: widget.color!,
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft))),
         onPressed: () {
@@ -61,8 +65,8 @@ class _TaskState extends State<Task> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Icon(
-                    Icons.work_rounded,
-                    color: Color(0xff627fd0),
+                    widget.icon,
+                    color: widget.color!.first,
                   ),
                 ),
               ),
@@ -75,7 +79,7 @@ class _TaskState extends State<Task> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                'Work',
+                widget.profile!,
                 style: TextStyle(
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
@@ -95,7 +99,7 @@ class _TaskState extends State<Task> {
                 lineHeight: 3,
                 backgroundColor: Colors.grey.withOpacity(.2),
                 linearGradient: LinearGradient(
-                    colors: [Color(0xff5363e2), Color(0xff62aee9)],
+                    colors: widget.color!,
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight),
               ),

@@ -5,11 +5,12 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 class TaskCard extends StatelessWidget {
   String? profile;
-  IconThemeData? icon;
+  IconData? icon;
   int? task_done;
   int? total_task;
-  List<Color> ?color;
-  TaskCard({this.profile, this.icon, this.task_done, this.total_task,this.color});
+  List<Color>? color;
+  TaskCard(
+      {this.profile, this.icon, this.task_done, this.total_task, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,12 @@ class TaskCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Task()));
+              context, MaterialPageRoute(builder: (context) => Task(
+profile: profile,
+icon: icon,
+color: color,
+
+              )));
         },
         child: Container(
           height: SizeConfig.screenHeight! * 0.46,
@@ -55,8 +61,8 @@ class TaskCard extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Icon(
-                                Icons.person,
-                                color: Color(0xfff65875),
+                                icon,
+                                color: color!.first,
                               ),
                             ),
                           ),
@@ -87,7 +93,7 @@ class TaskCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    'Personal',
+                    profile!,
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold,
@@ -108,7 +114,7 @@ class TaskCard extends StatelessWidget {
                   lineHeight: 3,
                   backgroundColor: Colors.grey.withOpacity(.2),
                   linearGradient: LinearGradient(
-                      colors: [Color(0xfff65875), Color(0xfff6ac51)],
+                      colors: color!,
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight),
                 )
