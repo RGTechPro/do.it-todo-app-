@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:housy_task/Provider/task.dart';
 import 'package:housy_task/sccreens/add_task.dart';
 import 'package:housy_task/widgets/task_tile.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 class Task extends StatefulWidget {
   Task({this.profile, this.icon, this.task_done, this.total_task, this.color});
@@ -34,11 +36,14 @@ class _TaskState extends State<Task> {
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft))),
         onPressed: () {
+          Provider.of<TaskData>(context, listen: false).profile =
+              widget.profile;
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => AddTask(
                         color: widget.color,
+                        profile: widget.profile,
                       )));
         },
       ),
