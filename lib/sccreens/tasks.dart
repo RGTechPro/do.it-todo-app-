@@ -35,7 +35,11 @@ class _TaskState extends State<Task> {
                     end: Alignment.bottomLeft))),
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddTask()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddTask(
+                        color: widget.color,
+                      )));
         },
       ),
       appBar: AppBar(

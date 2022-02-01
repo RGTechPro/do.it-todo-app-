@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({Key? key}) : super(key: key);
-
+  AddTask({this.color});
+  List<Color>? color;
   @override
   _AddTaskState createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
   String init_val = 'Today';
-  List<Color> GColors = [Color(0xff62aee9), Color(0xff5363e2)];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +125,7 @@ class _AddTaskState extends State<AddTask> {
                 ),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        colors: GColors,
+                        colors: widget.color!,
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft))),
           ),
