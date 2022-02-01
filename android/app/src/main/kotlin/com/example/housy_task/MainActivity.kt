@@ -1,4 +1,4 @@
-package com.example.housy_task
+package com.example.todo
 
 import io.flutter.embedding.android.FlutterActivity
 

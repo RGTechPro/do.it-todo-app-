@@ -31,7 +31,13 @@ dependencies:
     sdk: flutter
   font_awesome_flutter: ^9.2.0
   percent_indicator: ^4.0.0
-
+  firebase_core: ^1.12.0
+  cloud_firestore: ^3.1.7
+  google_sign_in: ^5.2.3
+  flutter_signin_button: ^2.0.0
+  firebase_auth: ^3.3.6
+  provider: ^6.0.2
+  flutter_svg: ^1.0.3
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -70,6 +76,8 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
   assets:
     - images/
+    - assets/icons/
+
   fonts:
     - family: Roboto
       fonts:

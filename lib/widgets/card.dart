@@ -4,7 +4,12 @@ import 'package:housy_task/sccreens/tasks.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class TaskCard extends StatelessWidget {
-  const TaskCard({Key? key}) : super(key: key);
+  String? profile;
+  IconThemeData? icon;
+  int? task_done;
+  int? total_task;
+  List<Color> ?color;
+  TaskCard({this.profile, this.icon, this.task_done, this.total_task,this.color});
 
   @override
   Widget build(BuildContext context) {

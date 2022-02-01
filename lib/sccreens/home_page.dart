@@ -141,7 +141,9 @@ class _HomePageState extends State<HomePage> {
                     //shrinkWrap: true,
                     //  physics: PageScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    children: [TaskCard(), TaskCard(), TaskCard()]),
+                    children: [TaskCard(
+                      profile: '',
+                    ), TaskCard(), TaskCard()]),
               ),
             )
           ],

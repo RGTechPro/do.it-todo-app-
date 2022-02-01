@@ -1,9 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.housy_task">
+    package="com.example.todo">
    <application
-        android:label="housy_task"
+        android:label="Todo"
         android:icon="@mipmap/ic_launcher">
         <activity
+           android:exported="true"
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
