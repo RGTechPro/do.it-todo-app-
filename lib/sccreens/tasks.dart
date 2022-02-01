@@ -29,7 +29,10 @@ class _TaskState extends State<Task> {
                     colors: GColors,
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft))),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AddTask()));
+        },
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black45),
@@ -38,10 +41,7 @@ class _TaskState extends State<Task> {
             padding: const EdgeInsets.all(11.0),
             child: IconButton(
               icon: Icon(Icons.more_vert),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddTask()));
-              },
+              onPressed: () {},
             ),
           )
         ],
