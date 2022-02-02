@@ -25,10 +25,18 @@ class _TaskTileState extends State<TaskTile> {
       trailing: (checkedValue)
           ? GestureDetector(
               onTap: () async {
-                final now = new DateTime.now();
-                String date = DateFormat.yMMMMd('en_US').format(now);
+                 String? date;
+            if (widget.day == 'Today') {
+              final now = new DateTime.now();
+              date = DateFormat.yMMMMd('en_US').format(now);
+            } else if (widget.day == 'Tommorrow') {
+              var now = new DateTime.now();
+              var t = now.add(new Duration(days: 1));
+              date = DateFormat.yMMMMd('en_US').format(t);
+            }
+
                 await deleteTask(
-                    widget.Dcontext!, widget.taskName!, date, widget.isDone!);
+                    widget.Dcontext!, widget.taskName!, date!, widget.isDone!);
               },
               child: Icon(
                 Icons.delete,

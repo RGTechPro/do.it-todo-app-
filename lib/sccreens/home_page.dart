@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:housy_task/constants/size_config.dart';
+import 'package:housy_task/sccreens/log_in.dart';
 import 'package:housy_task/widgets/card.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:housy_task/Provider/account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:housy_task/services/auth_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,7 +29,40 @@ class _HomePageState extends State<HomePage> {
               begin: Alignment.topRight,
               end: Alignment.bottomLeft)),
       child: Scaffold(
-        drawer: Drawer(),
+        drawer: Drawer(
+          child: Padding(
+            padding: const EdgeInsets.all(50.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap:    () {
+                        Provider.of<Auth>(context,listen: false).logout(context);
+                         Navigator.of(context).popUntil((route) => route.isFirst);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => const LogIn()));
+                    },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Logout',
+                        style: TextStyle(
+                            fontFamily: 'Roboto',
+                            fontSize: 20,
+                            color: Colors.red),
+                      ),
+                      Icon(
+                        Icons.logout,
+                        color: Colors.red,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Center(

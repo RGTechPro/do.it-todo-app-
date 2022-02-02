@@ -25,15 +25,15 @@ class TaskCard extends StatelessWidget {
       padding: const EdgeInsets.only(right: 12, top: 15, left: 2, bottom: 20),
       child: GestureDetector(
         onTap: () {
-            Provider.of<TaskData>(context, listen: false).profile =
-             profile;
+          Provider.of<TaskData>(context, listen: false).profile = profile;
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Task(
-profile: profile,
-icon: icon,
-color: color,
-
-              )));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Task(
+                        profile: profile,
+                        icon: icon,
+                        color: color,
+                      )));
         },
         child: Container(
           height: SizeConfig.screenHeight! * 0.46,
@@ -87,28 +87,77 @@ color: color,
                   height: SizeConfig.screenHeight! * 0.22,
                 ),
                 StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                    .collection(profile!)
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .snapshots(),
-                  builder: (context, snapshot) {
-                     final now = new DateTime.now();
-                  String date = DateFormat.yMMMMd('en_US').format(now);
-                  List tempDoc = snapshot.data![date];
-                  Provider.of<TaskData>(context).len = tempDoc.length;
-                    return Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      child: Text(
-                        '${Provider.of<TaskData>(context).len} Tasks',
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: Colors.black54,
-                            fontSize: 17),
-                      ),
-                    );
-                  }
-                ),
+                    stream: FirebaseFirestore.instance
+                        .collection(profile!)
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      try {
+                        final now = new DateTime.now();
+                        String date = DateFormat.yMMMMd('en_US').format(now);
+                        List tempDoc = snapshot.data![date];
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text(
+                            'Something went wrong',
+                          ));
+                        }
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (tempDoc.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 3),
+                            child: Text(
+                              '0 Task today',
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.black54,
+                                  fontSize: 17),
+                            ),
+                          );
+                        }
+
+                        Provider.of<TaskData>(context).len = tempDoc.length;
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          child: Text(
+                            '${Provider.of<TaskData>(context).len} Tasks',
+                            style: TextStyle(
+                                fontFamily: 'Roboto',
+                                color: Colors.black54,
+                                fontSize: 17),
+                          ),
+                        );
+                      } catch (e) {
+                        if (e.toString().contains('field does not exist') ||
+                            e.toString().contains('cannot get a field')) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 3),
+                            child: Text(
+                              '0 Task today',
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.black54,
+                                  fontSize: 17),
+                            ),
+                          );
+                        }
+                        return Center(
+                            child: Text(
+                          'Error: $e',
+                          textAlign: TextAlign.center,
+                        ));
+                      }
+                    }),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
@@ -124,44 +173,100 @@ color: color,
                   height: SizeConfig.screenHeight! * 0.020,
                 ),
                 StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                    .collection(profile!)
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .snapshots(),
-                  builder: (context, snapshot) {
+                    stream: FirebaseFirestore.instance
+                        .collection(profile!)
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      try {
+                        final now = new DateTime.now();
+                        String date = DateFormat.yMMMMd('en_US').format(now);
+                        List tempDoc = snapshot.data![date];
 
- final now = new DateTime.now();
-                  String date = DateFormat.yMMMMd('en_US').format(now);
-                  List tempDoc = snapshot.data![date];
-                  Provider.of<TaskData>(context).len = tempDoc.length;
-                  Provider.of<TaskData>(context).n = 0;
-                  for (int i = 0;
-                      i < Provider.of<TaskData>(context, listen: false).len;
-                      i++) {
-                    if (tempDoc[i]['isDone'] == true) {
-                      Provider.of<TaskData>(context).n++;
-                    }
-                  }
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text(
+                            'Something went wrong',
+                          ));
+                        }
 
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (tempDoc.isEmpty) {
+                          return LinearPercentIndicator(
+                            //  padding: EdgeInsets.only(right: 10),
+                            trailing: Text(
+                              '0%',
+                              style: TextStyle(
+                                  fontFamily: 'Roboto', color: Colors.black54),
+                            ),
+                            percent: 0,
+                            lineHeight: 3,
+                            backgroundColor: Colors.grey.withOpacity(.2),
+                            linearGradient: LinearGradient(
+                                colors: color!,
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight),
+                          );
+                        }
 
+                        Provider.of<TaskData>(context).len = tempDoc.length;
+                        Provider.of<TaskData>(context).n = 0;
+                        for (int i = 0;
+                            i <
+                                Provider.of<TaskData>(context, listen: false)
+                                    .len;
+                            i++) {
+                          if (tempDoc[i]['isDone'] == true) {
+                            Provider.of<TaskData>(context).n++;
+                          }
+                        }
 
-                    return LinearPercentIndicator(
-                      trailing: Text(
-                        '${(Provider.of<TaskData>(context).n / Provider.of<TaskData>(context).len * 100).toStringAsFixed(2)}%',
-                        style:
-                            TextStyle(fontFamily: 'Roboto', color: Colors.black54),
-                      ),
-                      percent: Provider.of<TaskData>(context).n /
-                          Provider.of<TaskData>(context).len,
-                      lineHeight: 3,
-                      backgroundColor: Colors.grey.withOpacity(.2),
-                      linearGradient: LinearGradient(
-                          colors: color!,
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight),
-                    );
-                  }
-                )
+                        return LinearPercentIndicator(
+                          trailing: Text(
+                            '${(Provider.of<TaskData>(context).n / Provider.of<TaskData>(context).len * 100).toStringAsFixed(2)}%',
+                            style: TextStyle(
+                                fontFamily: 'Roboto', color: Colors.black54),
+                          ),
+                          percent: Provider.of<TaskData>(context).n /
+                              Provider.of<TaskData>(context).len,
+                          lineHeight: 3,
+                          backgroundColor: Colors.grey.withOpacity(.2),
+                          linearGradient: LinearGradient(
+                              colors: color!,
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight),
+                        );
+                      } catch (e) {
+                        if (e.toString().contains('field does not exist') ||
+                            e.toString().contains('cannot get a field')) {
+                          return LinearPercentIndicator(
+                            // padding: EdgeInsets.only(right: 10),
+                            trailing: Text(
+                              '0%',
+                              style: TextStyle(
+                                  fontFamily: 'Roboto', color: Colors.black54),
+                            ),
+                            percent: 0,
+                            lineHeight: 3,
+                            backgroundColor: Colors.grey.withOpacity(.2),
+                            linearGradient: LinearGradient(
+                                colors: color!,
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight),
+                          );
+                        }
+                        return Center(
+                            child: Text(
+                          'Error: $e',
+                          textAlign: TextAlign.center,
+                        ));
+                      }
+                    })
               ],
             ),
           ),

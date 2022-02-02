@@ -96,10 +96,35 @@ class _TaskState extends State<Task> {
                     .collection(widget.profile!)
                     .doc(FirebaseAuth.instance.currentUser!.uid)
                     .snapshots(),
-                builder: (context, snapshot) {
-                  final now = new DateTime.now();
+                builder: (context, snapshot) { 
+                  try{
+                   final now = new DateTime.now();
                   String date = DateFormat.yMMMMd('en_US').format(now);
-                  List tempDoc = snapshot.data![date];
+        List tempDoc = snapshot.data![date];
+    if (snapshot.hasError) {
+                    return Center(
+                        child: Text(
+                      'Something went wrong',
+                    ));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+  if (tempDoc.isEmpty) {
+                       return Text(
+                    '0 Task today',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.black54,
+                        fontSize: 17),
+                  );
+                    }
+
+                
+                 
                   Provider.of<TaskData>(context).len = tempDoc.length;
 
                   return Text(
@@ -108,7 +133,25 @@ class _TaskState extends State<Task> {
                         fontFamily: 'Roboto',
                         color: Colors.black54,
                         fontSize: 17),
+                  );}
+catch (e) {
+                    if (e.toString().contains('field does not exist') ||
+                        e.toString().contains('cannot get a field')) {
+                    return Text(
+                    '0 Task today',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.black54,
+                        fontSize: 17),
                   );
+                    }
+                    return Center(
+                        child: Text(
+                      'Error: $e',
+                      textAlign: TextAlign.center,
+                    ));
+                  }
+
                 }),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -127,9 +170,47 @@ class _TaskState extends State<Task> {
                     .doc(FirebaseAuth.instance.currentUser!.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  final now = new DateTime.now();
+                 
+try{
+ final now = new DateTime.now();
                   String date = DateFormat.yMMMMd('en_US').format(now);
                   List tempDoc = snapshot.data![date];
+ if (snapshot.hasError) {
+                    return Center(
+                        child: Text(
+                      'Something went wrong',
+                    ));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+  if (tempDoc.isEmpty) {
+                        return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: LinearPercentIndicator(
+                      padding: EdgeInsets.only(right: 10),
+                      trailing: Text(
+                        '0%',
+                        style: TextStyle(
+                            fontFamily: 'Roboto', color: Colors.black54),
+                      ),
+                      percent: 0,
+                      lineHeight: 3,
+                      backgroundColor: Colors.grey.withOpacity(.2),
+                      linearGradient: LinearGradient(
+                          colors: widget.color!,
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight),
+                    ),
+                  );
+                    }
+
+                
+
+
                   Provider.of<TaskData>(context).len = tempDoc.length;
                   Provider.of<TaskData>(context).n = 0;
                   for (int i = 0;
@@ -158,7 +239,37 @@ class _TaskState extends State<Task> {
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight),
                     ),
+                  );}
+
+catch (e) {
+                    if (e.toString().contains('field does not exist') ||
+                        e.toString().contains('cannot get a field')) {
+                 return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: LinearPercentIndicator(
+                      padding: EdgeInsets.only(right: 10),
+                      trailing: Text(
+                        '0%',
+                        style: TextStyle(
+                            fontFamily: 'Roboto', color: Colors.black54),
+                      ),
+                      percent: 0,
+                      lineHeight: 3,
+                      backgroundColor: Colors.grey.withOpacity(.2),
+                      linearGradient: LinearGradient(
+                          colors: widget.color!,
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight),
+                    ),
                   );
+                    }
+                    return Center(
+                        child: Text(
+                      'Error: $e',
+                      textAlign: TextAlign.center,
+                    ));
+                  }
+
                 }),
             Text(
               'Today',
