@@ -4,7 +4,7 @@ The amazing part is that you won't loose you tasks data even if you have another
 
 # Snapshots
 
-<p float="left" align="center" margin="15px">
+<p float="left" align="center" margin="50px">
 <img src='https://user-images.githubusercontent.com/73791635/152419558-a5f2d16b-ecad-43b0-887e-8d65c6fae42f.png' width=215 height=426>
 <img src='https://user-images.githubusercontent.com/73791635/152419568-3db38d5c-59da-4ad2-a2f8-3cdceaf78774.png' width=215 height=426>
 <img src='https://user-images.githubusercontent.com/73791635/152419584-c539cc79-2a21-4130-914c-df51aabf6e9a.png' width=215 height=426>
