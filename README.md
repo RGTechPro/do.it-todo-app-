@@ -1,6 +1,6 @@
 # TODO APP
 A Simple Todo app which has three profiles - Personal, Work and Home with beautiful and `smooth UI` which enables you to lodge your daily tasks and keep an active track by `marking and deleting the completed tasks`. 
-The amazing part is that you won't loose your tasks data even if you are using thi app on another device beacuse you `need to sign in with google` at the initial stage. All your tasks are securely stored in the cloud.
+The amazing part is that you won't loose your tasks data even if you are using this app on another device beacuse you `need to sign in with google` at the initial stage. All your tasks are securely stored in the cloud.
 
 # Snapshots
 
