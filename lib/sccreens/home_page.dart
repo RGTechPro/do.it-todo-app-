@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:housy_task/Provider/account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:housy_task/services/auth_services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,6 +21,17 @@ class _HomePageState extends State<HomePage> {
   final now = new DateTime.now();
   List<Color> GColors = [Color(0xfff6ac51), Color(0xfff65875)];
   @override
+  final _url = 'https://rgtechpro.github.io/doIt_privacy_policy/';
+  void _launchURL() async {
+    try {
+      await launch(_url, forceWebView: true);
+    } catch (e) {
+      final snackBar = SnackBar(
+          duration: Duration(milliseconds: 1250), content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
@@ -35,28 +47,57 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap:    () {
-                        Provider.of<Auth>(context,listen: false).logout(context);
-                         Navigator.of(context).popUntil((route) => route.isFirst);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => const LogIn()));
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: GestureDetector(
+                    onTap: () {
+                      Provider.of<Auth>(context, listen: false).logout(context);
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LogIn()));
                     },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Logout',
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 20,
-                            color: Colors.red),
-                      ),
-                      Icon(
-                        Icons.logout,
-                        color: Colors.red,
-                      ),
-                    ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Logout',
+                          style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 20,
+                              color: Colors.red),
+                        ),
+                        Icon(
+                          Icons.logout,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: GestureDetector(
+                    onTap: () {
+                      _launchURL();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Privacy Policy',
+                          style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 20,
+                              color: Colors.red),
+                        ),
+                        Icon(
+                          Icons.privacy_tip,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

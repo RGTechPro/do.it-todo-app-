@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context)=>TaskData())
       ],
       child: MaterialApp(
-        title: 'Todo',
+        title: 'Do.it',
         theme: ThemeData(
           appBarTheme: AppBarTheme(
             elevation: 0,
