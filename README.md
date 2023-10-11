@@ -10,6 +10,7 @@ The amazing part is that you won't loose your tasks data even if you are using t
 <img src='https://user-images.githubusercontent.com/73791635/152419568-3db38d5c-59da-4ad2-a2f8-3cdceaf78774.png' width=215 height=426>
 <img src='https://user-images.githubusercontent.com/73791635/152419584-c539cc79-2a21-4130-914c-df51aabf6e9a.png' width=215 height=426>
 <img src='https://user-images.githubusercontent.com/73791635/152419603-b566e155-ec44-4e59-80f9-e520f9a5c86b.png' width=215 height=426>
+  <img src='https://i.ibb.co/3knwgtS/ezgif-com-video-to-gif.gif' width=215 height=426>
 <!-- <p style="padding-bottom:10"> -->
 <img src='https://user-images.githubusercontent.com/73791635/152419617-1f53348e-0531-4fea-bfc9-f577476b78b7.png' width=215 height=426>
 <img src='https://user-images.githubusercontent.com/73791635/152419632-81489d52-e551-42b4-a0d7-0736884d1e76.png' width=215 height=426>
