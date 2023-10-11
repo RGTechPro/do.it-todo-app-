@@ -5,7 +5,7 @@ The amazing part is that you won't loose your tasks data even if you are using t
 # Snapshots
 
 
-<p float="left" align="center" margin="50px">
+<p float="left" align="center" margin="150px">
 
 <img src='https://i.ibb.co/QkxY29h/Screenshot-1697049434.png' width=300 height=550>
 
