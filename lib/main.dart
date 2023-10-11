@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Do.it',
         theme: ThemeData(
-          appBarTheme: AppBarTheme(
+          appBarTheme:const AppBarTheme(
             elevation: 0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
